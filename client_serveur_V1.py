@@ -56,15 +56,15 @@ if __name__ == "__main__" :
     commandes = mp.Queue()       # queue stokant les N opérations à effectuer demandées par 1 demandeur
     reponses = mp.Queue()        # queue stokant les resultats par les N calculateurs
 
-    p_commande = mp.Process(target = demandeur, args=(commandes, N))
-    p_commande.start()
+    p_demandeur = mp.Process(target = demandeur, args=(commandes, N))
+    p_demandeur.start()
 
     liste_calculateur = []    
     for i in range (N) :
-        p_reponse = mp.Process(target = calculateur, args=(commandes, reponses))
-        p_reponse.start()
-        liste_calculateur.append(p_reponse)
+        p_calculateur = mp.Process(target = calculateur, args=(commandes, reponses))
+        p_calculateur.start()
+        liste_calculateur.append(p_calculateur)
 
-    p_commande.join()
+    p_demandeur.join()
     for p in liste_calculateur:
         p.join()

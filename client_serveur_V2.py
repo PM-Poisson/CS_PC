@@ -78,16 +78,16 @@ if __name__ == "__main__" :
     # generation execution de M processus demandeurs
     liste_demandeur = []    
     for id in range (M) :
-        p_commande = mp.Process(target = demandeur, args=(id, commandes, reponses))
-        p_commande.start()
-        liste_demandeur.append(p_commande)
+        p_demandeur = mp.Process(target = demandeur, args=(id, commandes, reponses))
+        p_demandeur.start()
+        liste_demandeur.append(p_demandeur)
 
     # generation execution de N processus calculateurs
     liste_calculateur = []    
     for i in range (N) :
-        p_reponse = mp.Process(target = calculateur, args=(i, commandes, reponses, verrou))
-        p_reponse.start()
-        liste_calculateur.append(p_reponse)
+        p_calculateur = mp.Process(target = calculateur, args=(i, commandes, reponses, verrou))
+        p_calculateur.start()
+        liste_calculateur.append(p_calculateur)
 
     for p in liste_demandeur:
         p.join()
