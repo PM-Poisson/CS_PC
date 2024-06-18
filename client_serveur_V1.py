@@ -7,6 +7,7 @@
 import multiprocessing as mp
 import os, time, random
 
+
 #version 1
 
 """ Version 1 : Un demandeur, n calculteurs. (3 points)
