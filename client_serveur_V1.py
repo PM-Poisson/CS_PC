@@ -21,7 +21,7 @@ le résultat dans une file d’attente des résultats.
 # Objectif : process commande qui genere les N commandes et dépot dans la queue commandes
 # Args:   queue commandes, N (int) : nombre de calculs à fournir
 
-def demandeur(commandes, N):        # 
+def demandeur(commandes, N):        
     for i in range (N) : 
         operateur=random.choice(["+", "-", "*", "/"])   # generation de la commande aléatoire
         opd1 = random.randint(1,10)

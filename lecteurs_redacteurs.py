@@ -17,7 +17,6 @@ plus aucun lecteur supplémentaire ne peut lire le document jusqu’à la fin de
 nb_demande_de_redaction==0) """
 
 
-
 class Document:
 
     def __init__(self):

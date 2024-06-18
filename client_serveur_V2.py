@@ -28,7 +28,7 @@ trouver les réponses à ses demandes.
  """
 
 # Objectif : process commande qui genere M commandes et dépot dans la queue unique commandes avec un id
-#           puis se met en attente jusqu'à récupurer son resultat danq la queue reponses en filtrant
+# puis se met en attente jusqu'à récupurer son resultat danq la queue reponses en filtrant
 # Args:   id (int) du demandeur, queue commandes, queue reponses
 
 def demandeur(id, commandes, reponses):        
@@ -56,7 +56,6 @@ def demandeur(id, commandes, reponses):
 def calculateur(i, commandes, reponses, verrou):      
     with verrou:
         if not commandes.empty():
-        
             id, commande = commandes.get()
             print("Le calculateur", i, "a récupéré le calcul du demandeur", id, ":", commande)
 
@@ -66,12 +65,11 @@ def calculateur(i, commandes, reponses, verrou):
             except ZeroDivisionError:
                 reponse = "erreur: division par zéro"
 
-            
             reponses.put((id, reponse))
         
 if __name__ == "__main__" :
     M = 3   # nombre demandeurs
-    N = 2  # nombre de calculteurs
+    N = 6  # nombre de calculteurs
 
     commandes = mp.Queue() 
     reponses = mp.Queue()       # queue unique de reponse 
