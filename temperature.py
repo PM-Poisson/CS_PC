@@ -8,12 +8,12 @@ import random, time
 
 
 """  T et P doivent communiquer des données au processus S (screen, affichage), qui affiche différentes mesures à des-
-tination d’un utilisateur / opérateur par l’intermédiaire d’un écran d’affichage (le boîtier que l’on retrouve sur le
+tination d'un utilisateur / opérateur par l'intermédiaire d'un écran d'affichage (le boîtier que l'on retrouve sur le
 mur dans un lieu climatisé).
-• L’écran d’affichage est une ressource unique et protégée.
-Seul le processus S a le droit d’écrire à l’écran
-L’objectif global de ce système temps réel embarqué est de maintenir la température et la
-pression d’un certain processus chimique dans des limites définies.
+• L'écran d'affichage est une ressource unique et protégée.
+Seul le processus S a le droit d'écrire à l'écran
+L'objectif global de ce système temps réel embarqué est de maintenir la température et la
+pression d'un certain processus chimique dans des limites définies.
  """
 
 

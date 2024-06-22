@@ -22,7 +22,7 @@ culé et déposé par un processus calculateur, le demandeur peut récupérer ce
 traiter des demandes de calculs fréquentes.
 
 (4) Comment faire si ne souhaite pas créer une Queue par demandeur ?
-Dans ce cas, lorsque un résultat est calculé et déposé par un processus calculateur, il ajoute l’iden-
+Dans ce cas, lorsque un résultat est calculé et déposé par un processus calculateur, il ajoute l'iden-
 tifiant di du demandeur. Ainsi, le demandeur peut filtrer la Queue (unique) des résultats pour
 trouver les réponses à ses demandes.
  """

@@ -12,10 +12,10 @@ import os, time, random
 
 """ Version 1 : Un demandeur, n calculteurs. (3 points)
 Le processus demandeur dépose (par itération) une expression arithmétique à la fois (par exemple
-”2 + 3”) dans une file d’attente des demandes (multiprocessing.Queue).
-Par ailleurs, chaque processus calculateur récupère une expression, évalue l’expression et dépose
-le résultat dans une file d’attente des résultats.
-(2) Que faire si l’on doit vérifier la justesse de l’expression. Par exemple, rejeter un expressions telle que ”2 + 3 − ” """
+”2 + 3”) dans une file d'attente des demandes (multiprocessing.Queue).
+Par ailleurs, chaque processus calculateur récupère une expression, évalue l'expression et dépose
+le résultat dans une file d'attente des résultats.
+(2) Que faire si l'on doit vérifier la justesse de l'expression. Par exemple, rejeter un expressions telle que ”2 + 3 − ” """
 
 
 # Objectif : process commande qui genere les N commandes et dépot dans la queue commandes

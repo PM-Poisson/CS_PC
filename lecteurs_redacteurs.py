@@ -9,11 +9,11 @@ import random
 
 
 """ Supposons que pour une simulation, on a n rédacteurs (qui modifient le document) et de m lecteurs de ce document. Le groupe est donc composé de n + m élèves. Par exemple, n = 2 et m = 4.
-Un document étant déposé, on ne peut avoir plus d’une rédaction à un moment donné mais il
-est possible d’avoir plusieurs lecteurs simultanées (en même temps). Bien entendu, la rédaction
+Un document étant déposé, on ne peut avoir plus d'une rédaction à un moment donné mais il
+est possible d'avoir plusieurs lecteurs simultanées (en même temps). Bien entendu, la rédaction
 exclue toute lecture et inversement.
-Par contre, la priorité est donnée aux rédacteurs. Dès qu’en rédacteur souhaite modifier le document (il manifeste d’abord ce souhait en ajoutant p. ex. +1 sur la variable nb_demande_de_redaction),
-plus aucun lecteur supplémentaire ne peut lire le document jusqu’à la fin des rédactions (jusque
+Par contre, la priorité est donnée aux rédacteurs. Dès qu'en rédacteur souhaite modifier le document (il manifeste d'abord ce souhait en ajoutant p. ex. +1 sur la variable nb_demande_de_redaction),
+plus aucun lecteur supplémentaire ne peut lire le document jusqu'à la fin des rédactions (jusque
 nb_demande_de_redaction==0) """
 
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     time.sleep(1)
     print("Demande de lecture (L2)")
     L2.start()
-    # Elles sont bloquées jusqu’à la fin de R1
+    # Elles sont bloquées jusqu'à la fin de R1
     # R1 termine
     # L1 entre en lecture ; L2 entre en lecture
 

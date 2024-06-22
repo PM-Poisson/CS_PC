@@ -8,15 +8,15 @@ import random
 import time
 
 
-""" On peut calculer une valeur approché de PI à l’aide d’un cercle unitaire et la méthode MonteCarlo (MC).
+""" On peut calculer une valeur approché de PI à l'aide d'un cercle unitaire et la méthode MonteCarlo (MC).
 Principe : on échantillonne un point (couple de réels (x, y) ∈ [0.0, 1.0]) qui se situe dans 1 4
 du cercle unitaire et on examine la valeur de x2 + y2 ≤ 1 (équation de ce cercle).
 ➙ Si "vrai", le point est dans le quart du cercle unitaire (on a un hit)
 ➙ Sinon (cas de miss), .
-modifier le code précédent pour effectuer le calcul à l’aide de plusieurs Processus.
+modifier le code précédent pour effectuer le calcul à l'aide de plusieurs Processus.
 ☞ Mesurer le temps et comparer.
 N.B. : dans la méthode envisagée, on fixe un nombre (p. ex. N = 106
-) d’itérations.
+) d'itérations.
 Si on décide de faire ce calcul par k processus, chaque processus effectuera N
 kitérations. """
 
@@ -29,7 +29,7 @@ def frequence_de_hits_pour_n_essais(nb_iteration, resultat):
     for _ in range(nb_iteration):
         x = random.random()
         y = random.random()
-        # Si le point est dans l’unité circle
+        # Si le point est dans l'unité circle
         if x * x + y * y <= 1:
             count += 1
     resultat.put(count)
@@ -60,7 +60,7 @@ def calcul(nb_total_iteration, k):
 
 if __name__ == "__main__":
     
-    nb_total_iteration = 10000000  # Nombre d’essais pour l’estimation
+    nb_total_iteration = 10000000  # Nombre d'essais pour l'estimation
     k = 4  # Nombre de processus en parallèle
 
     start_time = time.time()
