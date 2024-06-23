@@ -4,13 +4,17 @@
 # Date : 20/06/24
 
 '''
-20 processus sont créés et chaque processus représente un cheval.
+5 processus sont créés et chaque processus représente un cheval.
 Chaque cheval avance aléatoirement sur une ligne qui lui est dédiée. 
 On affiche un symbole qui représente le cheval (par exemple "(A>" pour le premier cheval). 
 Un cheval affiche son symbole, attend un certain délai aléatoire, 
 efface son symbole et le ré-affiche une colonne plus à droite. Ce qui donne l'impression qu'il avance.
 Chaque cheval inscrit sa position courante dans une case du tableau partagé. 
 Le processus "arbitre" doit à tout moment et en temps réel afficher le cheval qui est en tête de la course. 
+
+On peut changer le nombre de processus (actuellement 5) mais le terminal n'est parfois pas assez grand pour tous les afficher 
+et cela risque de créer des petits bugs visuels. 
+Néanmoins la course se termine comme il faut et l'arbitre fonctionne.
 '''
 
 import multiprocessing as mp
@@ -110,22 +114,29 @@ def erase_line():
     print(CLEARELN,end='')
 
 # La tache d'un cheval
-def un_cheval(ma_ligne : int, keep_running, positions, mutex) : # ma_ligne commence à 0
+def un_cheval(ma_ligne : int, keep_running, positions, mutex) :
     '''Fonction d'un cheval'''
-    col=1
+    col = 1
     while col < LONGEUR_COURSE and keep_running.value :
         with mutex:
-            move_to(ma_ligne * 4 + 1, col)  # Ajuster la position en hauteur pour les dessins plus grands
-            erase_line()
-            en_couleur(lyst_colors[ma_ligne%len(lyst_colors)])
-            print(chevaux_ascii[ma_ligne % len(chevaux_ascii)])  # Afficher le dessin ASCII
-        col+=1
+            # Effacer les 3 lignes du dessin à la position précédente
+            for i in range(3):
+                move_to(ma_ligne * 4 + 1 + i, col)
+                erase_line()
+            
+            # Afficher le dessin ASCII complet à la nouvelle position
+            for i, line in enumerate(chevaux_ascii[ma_ligne % len(chevaux_ascii)].split('\n')):
+                move_to(ma_ligne * 4 + 1 + i, col)
+                en_couleur(lyst_colors[ma_ligne % len(lyst_colors)])
+                print(line)
+        col += 1
         positions[ma_ligne] = col
-        time.sleep(0.1 * random.randint(1,5))
+        time.sleep(0.1 * random.randint(1, 5))
 
-    # Le premier arrivée gèle la course !
+    # Le premier arrivé gèle la course !
     # J'ai fini, je me dis à tout le monde
-    keep_running.value=False
+    keep_running.value = False
+
 
 def arbitre(positions, keep_running, mutex):
     '''Fonction arbitre'''
@@ -163,8 +174,8 @@ if __name__ == "__main__" :
         mp.set_start_method('fork') # Nécessaire sous macos, OK pour Linux
 
     keep_running = mp.Value(ctypes.c_bool, True)
-    positions = mp.Array('i', [0]*20)
-    nbprocess = 20
+    positions = mp.Array('i', [0]*5)
+    nbprocess = 5
     mes_process = [0 for i in range(nbprocess)]
     mutex = mp.Lock()
 
@@ -174,4 +185,38 @@ if __name__ == "__main__" :
     # Détournement d'interruption
     signal.signal(signal.SIGINT, detourner_signal) # CTRL_C_EVENT   ?
 
-    #
+    # Demander la prédiction de l'utilisateur
+    move_to(1, 1)
+    print("Prédisez le gagnant (A à E) : ", end='')
+    prediction = input().strip().upper()
+    if len(prediction) != 1 or not 'A' <= prediction <= chr(ord('A') + nbprocess - 1):
+        print("Prédiction invalide. Veuillez entrer une lettre entre A et E.")
+        sys.exit(1)
+
+    # Lancer les processus des chevaux
+    for i in range(nbprocess):
+        mes_process[i] = mp.Process(target=un_cheval, args= (i,keep_running, positions, mutex))
+        mes_process[i].start()
+
+    arbitre_process = mp.Process(target=arbitre, args=(positions, keep_running, mutex))
+    arbitre_process.start()
+
+    move_to(nbprocess*4 + 10, 1)
+    print("tous lancés, CTRL-C arrêtera la course ...")
+
+    for i in range(nbprocess):
+        mes_process[i].join()
+
+    # Terminer le processus arbitre
+    keep_running.value = False
+    arbitre_process.join()
+
+    # Déterminer le gagnant réel
+    gagnant = chr(ord('A') + [i for i, pos in enumerate(positions) if pos == max(positions)][0])
+    move_to(24, 1)
+    curseur_visible()
+    print(f"Fini ... Le gagnant est {gagnant}.", flush=True)
+    if prediction == gagnant:
+        print("Félicitations! Vous avez prédit correctement.")
+    else:
+        print("Désolé, votre prédiction était incorrecte.")
