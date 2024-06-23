@@ -1,6 +1,16 @@
+# Authors : Paul-Malo et Estelle ZHENG
+# Projet : CS-PC Calculs parallèles
+# Title : Billes
+# Date : 20/06/24
+
 import multiprocessing as mp
 import time
 import random
+
+'''
+Un gestionnaire de ressources (comme un gestionnaire de mémoire dans un système d'exploitation) 
+reçoit des demandes de certaine quantité de ressources (ici ressources = billes) et essaie de satisfaire ces demandes. 
+'''
 
 # Configuration initiale
 N = 4  # Nombre de processus

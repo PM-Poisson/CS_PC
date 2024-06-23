@@ -1,8 +1,20 @@
-'''Course hippique'''
+# Authors : Paul-Malo et Estelle ZHENG
+# Projet : CS-PC Calculs parallèles
+# Title : Course Hippique
+# Date : 20/06/24
+
+'''
+20 processus sont créés et chaque processus représente un cheval.
+Chaque cheval avance aléatoirement sur une ligne qui lui est dédiée. 
+On affiche un symbole qui représente le cheval (par exemple "(A>" pour le premier cheval). 
+Un cheval affiche son symbole, attend un certain délai aléatoire, 
+efface son symbole et le ré-affiche une colonne plus à droite. Ce qui donne l'impression qu'il avance.
+Chaque cheval inscrit sa position courante dans une case du tableau partagé. 
+Le processus "arbitre" doit à tout moment et en temps réel afficher le cheval qui est en tête de la course. 
+'''
 
 import multiprocessing as mp
 import time
-import math
 import random
 import sys
 import ctypes
@@ -52,12 +64,13 @@ LONGEUR_COURSE = 50 # Tout le monde aura la même copie (donc no need to have a 
 
 # Dessins ASCII pour les chevaux
 chevaux_ascii = [
-    "   \\   O\n    \\ /|\n      / \\",
-    "   \\   O\n    \\ |\\\n      / \\",
-    "   \\   O\n    \\| \\\n      / \\",
-    "   \\   O\n    \\|/\n      / \\",
-    "   \\   O\n    /|\\\n      / \\"
+    "   \\   O \n    \\ /|\\\n      / \\",
+    "   \\   O \n    \\  |\\\n      / \\",
+    "   \\   O \n    \\ /|\n      / \\",
+    "   \\   O \n    \\| \\\n      / \\",
+    "   \\   O \n    \\|/\n      / \\"
 ]
+
 #-------------------------------------------------------
 # Une liste de couleurs à affecter aléatoirement aux chevaux
 lyst_colors=[CL_WHITE, CL_RED, CL_GREEN, CL_BROWN , CL_BLUE, CL_MAGENTA,
@@ -103,7 +116,7 @@ def un_cheval(ma_ligne : int, keep_running, positions, mutex) : # ma_ligne comme
     while col < LONGEUR_COURSE and keep_running.value :
         with mutex:
             move_to(ma_ligne * 4 + 1, col)  # Ajuster la position en hauteur pour les dessins plus grands
-            erase_line_from_beg_to_curs()
+            erase_line()
             en_couleur(lyst_colors[ma_ligne%len(lyst_colors)])
             print(chevaux_ascii[ma_ligne % len(chevaux_ascii)])  # Afficher le dessin ASCII
         col+=1
@@ -129,7 +142,7 @@ def arbitre(positions, keep_running, mutex):
                 last = i
         with mutex:
             move_to(len(positions)*4 + 5, 1)
-            erase_line_from_beg_to_curs()
+            erase_line()
             print(f"Premier : {chr(ord('A') + leader)}, Dernier : {chr(ord('A') + last)}")
 
 #------------------------------------------------
@@ -161,38 +174,4 @@ if __name__ == "__main__" :
     # Détournement d'interruption
     signal.signal(signal.SIGINT, detourner_signal) # CTRL_C_EVENT   ?
 
-    # Demander la prédiction de l'utilisateur
-    move_to(1, 1)
-    print("Prédisez le gagnant (A à T) : ", end='')
-    prediction = input().strip().upper()
-    if len(prediction) != 1 or not 'A' <= prediction <= chr(ord('A') + nbprocess - 1):
-        print("Prédiction invalide. Veuillez entrer une lettre entre A et T.")
-        sys.exit(1)
-
-    # Lancer les processus des chevaux
-    for i in range(nbprocess):
-        mes_process[i] = mp.Process(target=un_cheval, args= (i,keep_running, positions, mutex))
-        mes_process[i].start()
-
-    arbitre_process = mp.Process(target=arbitre, args=(positions, keep_running, mutex))
-    arbitre_process.start()
-
-    move_to(nbprocess+10, 1)
-    print("tous lancés, CTRL-C arrêtera la course ...")
-
-    for i in range(nbprocess):
-        mes_process[i].join()
-
-    # Terminer le processus arbitre
-    keep_running.value = False
-    arbitre_process.join()
-
-    # Déterminer le gagnant réel
-    gagnant = chr(ord('A') + [i for i, pos in enumerate(positions) if pos == max(positions)][0])
-    move_to(24, 1)
-    curseur_visible()
-    print(f"Fini ... Le gagnant est {gagnant}.", flush=True)
-    if prediction == gagnant:
-        print("Félicitations! Vous avez prédit correctement.")
-    else:
-        print("Désolé, votre prédiction était incorrecte.")
+    #

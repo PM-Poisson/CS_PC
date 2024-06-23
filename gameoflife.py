@@ -1,9 +1,25 @@
-# Jeu de la vie
+# Authors : Paul-Malo et Estelle ZHENG
+# Projet : CS-PC Calculs parallèles
+# Title : Jeu de la vie
+# Date : 20/06/24
 
 import threading
 import time
 import os
 import random
+
+'''
+Le jeu de la Vie (Game of Life) est un automate cellulaire imaginé par John Horton Conway en 1970. 
+Malgré des règles très simples, il a été démontré Turing-complet. 
+
+Le jeu de la Vie est un « jeu à zéro joueur », puisqu'il ne nécessite aucune intervention du joueur lors de son déroulement. 
+Il s'agit d'un automate cellulaire, un modèle où chaque état conduit mécaniquement à l'état suivant à partir de règles préétablies.
+Une cellule possède huit voisines, qui sont les cellules adjacentes horizontalement, verticalement et diagonalement.
+
+À chaque itération, l'état d'une cellule est entièrement déterminé par l'état de ses huit cellules voisines, selon les règles suivantes : 
+    Une cellule morte possédant exactement trois cellules voisines vivantes devient vivante (elle naît) ;
+    Une cellule vivante possédant deux ou trois cellules voisines vivantes le reste, sinon elle meurt.
+'''
 
 # Taille de l'univers (lignes, colonnes)
 LIG, COL = 30, 30
@@ -80,9 +96,10 @@ update_thread.daemon = True
 update_thread.start()
 
 # Boucle principale
-try:
-    while True:
-        affichage(mat)
-        time.sleep(0.1)  # Pause de 100ms pour limiter le bug de rafraîchissement
-except KeyboardInterrupt:
-    pass
+if __name__ == "__main__":
+    try:
+        while True:
+            affichage(mat)
+            time.sleep(0.1)  # Pause de 100ms pour limiter le bug de rafraîchissement
+    except KeyboardInterrupt:
+        pass
